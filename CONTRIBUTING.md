@@ -18,3 +18,21 @@ Use these repository settings to keep `main` protected:
 5. Restrict direct pushes to `main`.
 
 These settings are managed in GitHub repository settings and cannot be fully enforced from repository files alone.
+
+## What to check or change in the repo itself
+
+These are the files in this repository that control contribution flow:
+
+- `.github/ISSUE_TEMPLATE/config.yml`  
+  Disables blank issues and sends contributors to Discussions first.
+- `.github/ISSUE_TEMPLATE/problem-report.yml`  
+  Requires a Discussion URL before an issue can be submitted.
+- `.github/PULL_REQUEST_TEMPLATE.md`  
+  Adds the pull request checklist contributors should follow.
+- `.github/CODEOWNERS`  
+  Defines default code owners used by required-review branch protection rules.
+
+And these must be configured in GitHub UI (not in repo files):
+
+- **Settings → Branches → Branch protection rules** for `main`.
+- **Settings → General → Features** to ensure Discussions are enabled.
