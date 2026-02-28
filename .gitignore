@@ -3,7 +3,12 @@ __pycache__/
 *.py[codz]
 *$py.class
 
-docs/
+docs/*
+!docs/*.md
+docs/Enforcing Single-Role Authentication for Cortex Code CLI with Programmatic Access Tokens.md
+!docs/images/
+docs/images/*
+!docs/images/cortexclistartscreen.png
 logs/
 sql/
 # C extensions

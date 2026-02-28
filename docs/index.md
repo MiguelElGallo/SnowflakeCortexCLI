@@ -10,13 +10,10 @@ This guide shares a few practical ideas to help make sure Cortex Code CLI can us
 
 ![Change my mind meme about single-role Cortex CLI enforcement](images/change-my-mind.png)
 
-> [!WARNING]
->
-> ## 🚨 ULTRA IMPORTANT — READ FIRST
->
-> ## Do **not** try this in your production Snowflake account.
-> Use a **trial account** or a **new empty account** first and get familiar with the concepts.
-> Then plan carefully how to implement this in your production account.
+!!! warning "Ultra Important - Read First"
+    Do **not** try this in your production Snowflake account.
+    Use a **trial account** or a **new empty account** first and get familiar with the concepts.
+    Then plan carefully how to implement this in your production account.
 
 ## TL;DR
 
