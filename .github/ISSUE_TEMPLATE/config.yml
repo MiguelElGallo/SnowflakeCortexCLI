@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Start a Discussion first
+    url: https://github.com/MiguelElGallo/SnowflakeCortexCLI/discussions/new/choose
+    about: Please open a Discussion before creating an Issue.
