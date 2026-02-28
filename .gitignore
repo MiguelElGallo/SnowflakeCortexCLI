@@ -9,8 +9,6 @@ docs/Enforcing Single-Role Authentication for Cortex Code CLI with Programmatic 
 !docs/images/
 docs/images/*
 !docs/images/cortexclistartscreen.png
-!docs/images/change-my-mind.png
-!docs/images/change-my-mind.svg
 logs/
 sql/
 # C extensions

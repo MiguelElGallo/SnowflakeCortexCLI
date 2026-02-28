@@ -8,8 +8,6 @@ How can you use a role with minimal privileges? If the Snowflake user has multip
 
 This guide shares a few practical ideas to help make sure Cortex Code CLI can use only one role. The approach is not especially clean or elegant, but I could not find another documented way to enforce it. Hopefully someone proves me wrong soon.
 
-![Change my mind meme about single-role Cortex CLI enforcement](images/change-my-mind.png)
-
 !!! warning "Ultra Important - Read First"
     Do **not** try this in your production Snowflake account.
     Use a **trial account** or a **new empty account** first and get familiar with the concepts.
