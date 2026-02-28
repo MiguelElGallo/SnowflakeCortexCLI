@@ -1,0 +1,15 @@
+[project]
+name = "snowflake-cortex-cli-docx-converter"
+version = "0.1.0"
+description = "Convert DOCX files in docs/ to Markdown using MarkItDown."
+requires-python = ">=3.10"
+dependencies = [
+    "markitdown[docx]>=0.1.4,<0.2",
+]
+
+[project.scripts]
+convert-docs = "snowflake_cortex_cli_docx_converter.cli:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
