@@ -1,5 +1,20 @@
 # Enforcing Single-Role Authentication for Cortex Code CLI with Programmatic Access Tokens
 
+> [!WARNING]
+>
+> ## 🚨 ULTRA IMPORTANT — READ FIRST
+>
+> ## Do **not** try this in your production Snowflake account.
+> Use a **trial account** or a **new empty account** first and get familiar with the concepts.
+> Then plan carefully how to implement this in your production account.
+
+## TL;DR
+
+* If you need Cortex Code CLI to run under **exactly one Snowflake role**, use a dedicated **TYPE=SERVICE** user with a PAT created using `ROLE_RESTRICTION`. [[2]](https://docs.snowflake.com/en/sql-reference/sql/alter-user-add-programmatic-access-token)
+* Do **not** rely on a human user for this boundary: a **TYPE=PERSON** user can self-create PATs for themselves and can omit `ROLE_RESTRICTION`. [[3]](https://docs.snowflake.com/en/user-guide/programmatic-access-tokens)
+* Block PATs for human users such as `miguelp` with an authentication policy that omits `PROGRAMMATIC_ACCESS_TOKEN`, and allow PATs only for the dedicated CLI service user (or for service users as a class). [[13]](https://docs.snowflake.com/en/user-guide/programmatic-access-tokens) [[14]](https://docs.snowflake.com/en/sql-reference/sql/alter-account)
+* Grant the CLI service user only the role it needs, mint the PAT with that role restriction, and use the PAT as the `password` in `~/.snowflake/connections.toml`. [[2]](https://docs.snowflake.com/en/sql-reference/sql/alter-user-add-programmatic-access-token) [[27]](https://docs.snowflake.com/en/user-guide/cortex-code/cli-reference)
+
 ## The problem you are trying to solve
 
 The **Cortex Code CLI** is designed to authenticate against Snowflake using either:
@@ -246,6 +261,85 @@ cortex -c miguel\_cli
 The CLI supports -c for selecting a specific connection. [[29]](https://docs.snowflake.com/en/user-guide/cortex-code/cli-reference)
 
 Tip: If someone tries to “change role” in the connection, the token-bound role restriction should prevent using a more privileged role than the PAT allows. Snowflake states this explicitly for PAT-authenticated REST requests, and the PAT’s restricted role is the one used for privilege evaluation during authentication. [[30]](https://docs.snowflake.com/en/developer-guide/snowflake-rest-api/setting-context)
+
+## How to create a new `xxxx_cli` user and block PATs for `miguelp`
+
+If you want a second CLI identity and you want the policy to be explicit at the user level, the pattern is:
+
+* `xxxx_cli`: service user, PAT allowed.
+* `miguelp`: person user, PAT blocked.
+
+This is useful when you want a targeted rollout without changing the policy for every user in the account. Snowflake documents that a user-level authentication policy takes precedence over broader account-level policy. [[15]](https://docs.snowflake.com/en/sql-reference/sql/alter-account)
+
+### 1. Create the role and service user
+
+USE ROLE USERADMIN;
+
+CREATE ROLE XXXX_CLI_ROLE
+ COMMENT = 'Least-privileged role for xxxx_cli';
+
+CREATE USER XXXX_CLI
+ TYPE = SERVICE
+ COMMENT = 'Service user for Cortex Code CLI';
+
+Snowflake supports `TYPE = SERVICE` on `CREATE USER`, and service users are intended for non-interactive auth. [[23]](https://docs.snowflake.com/en/sql-reference/sql/create-user) [[18]](https://docs.snowflake.com/en/user-guide/admin-user-management)
+
+### 2. Grant the restricted role
+
+USE ROLE SECURITYADMIN;
+
+GRANT ROLE XXXX_CLI_ROLE TO USER XXXX_CLI;
+
+The PAT’s `ROLE_RESTRICTION` must already be granted to the user. [[2]](https://docs.snowflake.com/en/sql-reference/sql/alter-user-add-programmatic-access-token)
+
+### 3. Create one policy that allows PATs and one that blocks them
+
+CREATE AUTHENTICATION POLICY cli_user_pat_allowed
+ AUTHENTICATION_METHODS = ('PROGRAMMATIC_ACCESS_TOKEN', 'KEYPAIR', 'OAUTH', 'WORKLOAD_IDENTITY')
+ PAT_POLICY = (
+  NETWORK_POLICY_EVALUATION = ENFORCED_REQUIRED
+ );
+
+CREATE AUTHENTICATION POLICY person_user_no_pat
+ AUTHENTICATION_METHODS = ('SAML', 'OAUTH', 'KEYPAIR', 'WORKLOAD_IDENTITY', 'PASSWORD');
+
+If `PROGRAMMATIC_ACCESS_TOKEN` is not in `AUTHENTICATION_METHODS`, Snowflake says the user cannot generate or use PATs. [[13]](https://docs.snowflake.com/en/user-guide/programmatic-access-tokens)
+
+### 4. Attach those policies directly to the two users
+
+ALTER USER XXXX_CLI SET AUTHENTICATION POLICY cli_user_pat_allowed;
+
+ALTER USER MIGUELP SET AUTHENTICATION POLICY person_user_no_pat;
+
+That gives `xxxx_cli` PAT-capable non-interactive access, while `miguelp` is blocked from creating or using PATs. [[13]](https://docs.snowflake.com/en/user-guide/programmatic-access-tokens) [[15]](https://docs.snowflake.com/en/sql-reference/sql/alter-account)
+
+### 5. Mint the PAT for `xxxx_cli`
+
+ALTER USER XXXX_CLI ADD PROGRAMMATIC ACCESS TOKEN xxxx_cli_token
+ ROLE_RESTRICTION = 'XXXX_CLI_ROLE'
+ DAYS_TO_EXPIRY = 30
+ COMMENT = 'Token for Cortex Code CLI';
+
+For a service user, role restriction is required by default, and Snowflake only prints the token secret once. [[26]](https://docs.snowflake.com/en/sql-reference/sql/alter-user-add-programmatic-access-token) [[2]](https://docs.snowflake.com/en/sql-reference/sql/alter-user-add-programmatic-access-token)
+
+### 6. Configure Cortex Code CLI
+
+In `~/.snowflake/connections.toml`:
+
+[xxxx_cli]
+account = "<ACCOUNT>"
+user = "XXXX_CLI"
+password = "<PASTE_TOKEN_SECRET_HERE>"
+warehouse = "<WAREHOUSE>"
+role = "XXXX_CLI_ROLE"
+database = "<DATABASE>"
+schema = "<SCHEMA>"
+
+Then run:
+
+cortex -c xxxx_cli
+
+This uses the PAT as the password value, which matches Snowflake’s documented Cortex Code CLI connection format. [[27]](https://docs.snowflake.com/en/user-guide/cortex-code/cli-reference)
 
 ## Hardening and operational controls that matter in practice
 
