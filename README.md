@@ -1,5 +1,7 @@
 # Enforcing Single-Role Authentication for Cortex Code CLI with Programmatic Access Tokens
 
+[![Docs PR Check](https://github.com/MiguelElGallo/SnowflakeCortexCLI/actions/workflows/pr-docs.yml/badge.svg)](https://github.com/MiguelElGallo/SnowflakeCortexCLI/actions/workflows/pr-docs.yml)
+
 When you start Cortex CLI, you get this "friendly" message:
 
 ![Cortex CLI start screen](images/cortexclistartscreen.png)
