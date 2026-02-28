@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">Change my mind style meme about Cortex Code CLI single-role enforcement</title>
+  <desc id="desc">A generic sidewalk booth scene with a sign that says a dedicated service user and role restricted PAT are the only enforceable way to keep Cortex Code CLI on one Snowflake role, followed by prove me wrong.</desc>
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#dff2ff" />
+      <stop offset="100%" stop-color="#f6fbff" />
+    </linearGradient>
+    <linearGradient id="ground" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#c7d3bf" />
+      <stop offset="100%" stop-color="#a2b394" />
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#1c2833" flood-opacity="0.18" />
+    </filter>
+  </defs>
+
+  <rect width="1200" height="675" fill="url(#sky)" />
+  <rect y="500" width="1200" height="175" fill="url(#ground)" />
+  <rect y="470" width="1200" height="42" fill="#7f8c8d" />
+  <rect y="478" width="1200" height="10" fill="#d6dbdf" opacity="0.65" />
+
+  <circle cx="110" cy="105" r="46" fill="#ffe28a" opacity="0.95" />
+  <circle cx="980" cy="92" r="34" fill="#ffffff" opacity="0.75" />
+  <circle cx="1020" cy="84" r="26" fill="#ffffff" opacity="0.75" />
+  <circle cx="1056" cy="96" r="20" fill="#ffffff" opacity="0.75" />
+
+  <g filter="url(#shadow)">
+    <polygon points="410,290 860,250 930,455 475,505" fill="#815a3a" />
+    <polygon points="402,282 852,242 922,447 467,497" fill="#8b613d" />
+    <rect x="442" y="440" width="42" height="150" fill="#4d3a2b" />
+    <rect x="835" y="410" width="42" height="180" fill="#4d3a2b" />
+    <rect x="468" y="472" width="455" height="18" fill="#6b4c34" opacity="0.4" />
+  </g>
+
+  <g filter="url(#shadow)">
+    <polygon points="515,314 782,278 842,468 567,506" fill="#f7f0df" stroke="#9a8f77" stroke-width="3" />
+    <text x="688" y="344" text-anchor="middle" font-family="Helvetica, Arial, sans-serif" font-size="24" font-weight="700" fill="#17202a">
+      <tspan x="688" dy="0">A dedicated TYPE=SERVICE user</tspan>
+      <tspan x="688" dy="34">plus a ROLE_RESTRICTION PAT</tspan>
+      <tspan x="688" dy="34">is the only enforceable way</tspan>
+      <tspan x="688" dy="34">to keep Cortex CLI on exactly</tspan>
+      <tspan x="688" dy="34">one Snowflake role.</tspan>
+      <tspan x="688" dy="48" font-size="30">PROVE ME WRONG.</tspan>
+    </text>
+  </g>
+
+  <g filter="url(#shadow)">
+    <ellipse cx="337" cy="327" rx="56" ry="65" fill="#243746" />
+    <rect x="295" y="385" width="96" height="118" rx="22" fill="#4b6a88" />
+    <rect x="277" y="503" width="38" height="110" rx="14" fill="#2e4053" />
+    <rect x="359" y="503" width="38" height="110" rx="14" fill="#2e4053" />
+    <rect x="240" y="383" width="72" height="28" rx="14" fill="#4b6a88" transform="rotate(-12 240 383)" />
+    <rect x="369" y="386" width="88" height="26" rx="13" fill="#4b6a88" transform="rotate(14 369 386)" />
+    <rect x="288" y="520" width="116" height="18" rx="9" fill="#1b2631" />
+  </g>
+
+  <text x="65" y="632" font-family="Helvetica, Arial, sans-serif" font-size="24" fill="#1f2d3d" opacity="0.82">
+    README thesis, now in the standard internet peer-review format.
+  </text>
+</svg>
